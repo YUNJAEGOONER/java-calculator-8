@@ -15,7 +15,7 @@
 
 ## 구현할 기능
 - [x] 자바 코드 컨벤션 설정 
-- [ ] camp.nextstep.edu.missionutils에서 제공하는 Console API를 사용하여 입력 받기
+- [x] camp.nextstep.edu.missionutils에서 제공하는 Console API를 사용하여 입력 받기
 - [ ] 커스텀 구분자 존재 여부 판단하기
 - [ ] 유효한 입력인지 판단하기 (구분자 이외의 문자가 없는지, 예외 발생 시, `IllegalArgumentException`)
 - [ ] 테스트 코드 작성하기
