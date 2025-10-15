@@ -11,15 +11,44 @@ public class Application {
     public static Character getCustomDelimiter(String input){
         if(input.length() >= 4){
             String customSequence = input.substring(0, 5);
-            if(customSequence.matches("//.\\\\n")){
-                return customSequence.charAt(2);
+            if(customSequence.matches("//.\\\\n")){ //맨앞이 //구분자\n 인 경우
+               return customSequence.charAt(2);
             }
         }
         return null;
     }
 
+    public static String convertCustomToNormalDelimiter(String input, char cDelimiter){
+        input = input.substring(5); //custom 구분자를 위한 문자들 지우기
+        return input.replace(cDelimiter, ','); //custom 구분자를 일반 구분자로 변경
+    }
+
+    public static String[] checkAvailableAndSplit(String input){
+        String [] operandArr = input.split(",|:"); // 기본 구분자 (쉼표 또는 콜론);
+        for(int i = 0 ; i < operandArr.length ; i ++) {
+            if(operandArr[i] == null){
+                throw new IllegalStateException("유효하지 않은 입력입니다.");
+            }
+        }
+        return operandArr;
+    }
+
     public static void main(String[] args) {
         // TODO: 프로그램 구현
         String input = getInput();
+
+        Character customDelimiter = getCustomDelimiter(input);
+
+        if(customDelimiter != null){
+            input = convertCustomToNormalDelimiter(input, customDelimiter);
+        }
+
+        try {
+            String [] operandArr = checkAvailableAndSplit(input);
+        }
+        catch (IllegalStateException e){
+            System.out.println("e = " + e);
+        }
+
     }
 }
