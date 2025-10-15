@@ -23,14 +23,31 @@ public class Application {
         return input.replace(cDelimiter, ','); //custom 구분자를 일반 구분자로 변경
     }
 
+    public static boolean checkAvailableSequence(String input){
+        return input.matches("[0-9:,]+"); // 구분자와 양의 정수로만 구성
+    }
+
     public static String[] checkAvailableAndSplit(String input){
+
+        if(!checkAvailableSequence(input)){
+            throw new IllegalArgumentException("수식은 구분자와 양의 정수로만 구성이 되어야 합니다.");
+        }
+
         String [] operandArr = input.split(",|:"); // 기본 구분자 (쉼표 또는 콜론);
         for(int i = 0 ; i < operandArr.length ; i ++) {
             if(operandArr[i] == null){
-                throw new IllegalStateException("유효하지 않은 입력입니다.");
+                throw new IllegalArgumentException("유효하지 않은 입력입니다.(예 - 구분자가 연속되서 등장하면 안됩니다.)");
             }
         }
         return operandArr;
+    }
+
+    public static int sumStringArr(String [] arr){
+        int sum = 0;
+        for(int i = 0 ; i < arr.length ; i ++ ){
+            sum += Integer.parseInt(arr[i]);
+        }
+        return sum;
     }
 
     public static void main(String[] args) {
@@ -43,12 +60,8 @@ public class Application {
             input = convertCustomToNormalDelimiter(input, customDelimiter);
         }
 
-        try {
-            String [] operandArr = checkAvailableAndSplit(input);
-        }
-        catch (IllegalStateException e){
-            System.out.println("e = " + e);
-        }
-
+        String [] operandArr = checkAvailableAndSplit(input);
+        int result = sumStringArr(operandArr);
+        System.out.println("결과 : " + result);
     }
 }

@@ -18,4 +18,5 @@
 - [x] camp.nextstep.edu.missionutils에서 제공하는 Console API를 사용하여 입력 받기
 - [x] 커스텀 구분자 존재 여부 판단하기
 - [x] 유효한 입력인지 판단하기 (구분자 이외의 문자가 없는지, 예외 발생 시, `IllegalArgumentException`)
+- [x] 문자열에 있는 숫자들을 모두 더하기
 - [ ] 테스트 코드 작성하기
