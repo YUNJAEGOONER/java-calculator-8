@@ -1,5 +1,7 @@
 package calculator;
 import camp.nextstep.edu.missionutils.Console;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application {
 
@@ -8,8 +10,8 @@ public class Application {
         return Console.readLine();
     }
 
-    public static Character getCustomDelimiter(String input){
-        return input.charAt(3);
+    public static char getCustomDelimiter(String input){
+        return input.charAt(2);
     }
 
     public static String convertCustomToNormalDelimiter(String input, char cDelimiter){
@@ -17,33 +19,24 @@ public class Application {
         return input.replace(cDelimiter, ','); //custom 구분자를 일반 구분자로 변경
     }
 
-    public static boolean checkAvailableSequence(String input){
-        return input.matches("[0-9:,]+"); // 구분자와 양의 정수로만 구성
-    }
-
-    public static String[] checkAvailableAndSplit(String input){
-
-        if(!checkAvailableSequence(input)){
-            throw new IllegalArgumentException("수식은 구분자와 양의 정수로만 구성이 되어야 합니다.");
-        }
-
+    public static List<Double> checkAvailableAndSplit(String input){
         String [] operandArr = input.split(",|:"); // 기본 구분자 (쉼표 또는 콜론);
-
+        List<Double> numList = new ArrayList<>();
         for(int i = 0 ; i < operandArr.length ; i ++) {
-            if(operandArr[i] == null){
-                throw new IllegalArgumentException("유효하지 않은 입력입니다.(예 - 구분자가 연속되서 등장하면 안됩니다.)");
+            try{
+                numList.add(Double.parseDouble(operandArr[i]));
             }
-            if(operandArr[i].length() >= 2 && operandArr[i].startsWith("0")){
-                throw new IllegalArgumentException("유효하지 않은 입력입니다.(0으로 시작되는 숫자는 0 뿐입니다.)");
+            catch (NumberFormatException e){
+                throw new IllegalArgumentException(e.getCause());
             }
         }
-        return operandArr;
+        return numList;
     }
 
-    public static int sumStringArr(String [] arr){
-        int sum = 0;
-        for(int i = 0 ; i < arr.length ; i ++ ){
-            sum += Integer.parseInt(arr[i]);
+    public static double getSum(List<Double> arr){
+        double sum = 0;
+        for(int i = 0 ; i < arr.size() ; i ++ ){
+            sum += arr.size();
         }
         return sum;
     }
@@ -53,11 +46,7 @@ public class Application {
     }
 
     public static boolean startWithCustomDelimiter(String input){
-        if(input.length() >= 4){
-            String customSequence = input.substring(0, 5);
-            return customSequence.matches("//.\\\\n"); // 맨앞이 //구분자\n 인 경우
-        }
-        return false;
+        return (input.length() >= 4 && input.startsWith("//") && input.contains("\\n"));
     }
 
     //맨 앞이 숫자로 시작하거나 custom 문자를 위한
@@ -68,7 +57,7 @@ public class Application {
         if(!(isNumber(input.charAt(0)) || startWithCustomDelimiter(input))) { //시작을 검사
             throw new IllegalArgumentException("수식은 양의 정수 또는 //(커스텀 구분자)\\n로 시작되어야 합니다");
         }
-        if(!isNumber(input.charAt(input.length() - 1))){ //끝을 검사
+        if(!isNumber(input.charAt(input.length() - 1))){ // 끝을 검사
             throw new IllegalArgumentException("수식은 양의 정수로 끝나야 합니다.");
         }
     }
@@ -80,12 +69,13 @@ public class Application {
         checkAvailableInput(input);
 
         if(startWithCustomDelimiter(input)){
-            Character customDelimiter = getCustomDelimiter(input);
+            char customDelimiter = getCustomDelimiter(input);
+            System.out.println("customDelimiter = " + customDelimiter);
             input = convertCustomToNormalDelimiter(input, customDelimiter);
         }
 
-        String [] operandArr = checkAvailableAndSplit(input);
-        int result = sumStringArr(operandArr);
+        List<Double> operandList = checkAvailableAndSplit(input);
+        double result = getSum(operandList);
         System.out.println("결과 : " + result);
     }
 }
