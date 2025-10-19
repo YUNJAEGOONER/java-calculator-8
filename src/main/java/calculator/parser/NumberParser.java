@@ -1,5 +1,6 @@
 package calculator.parser;
 
+import calculator.exception.ExceptionCode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +21,12 @@ public class NumberParser {
             try{
                 Double num = Double.parseDouble(operandArr[i]);
                 if(num < 0){
-                    throw new IllegalArgumentException("양수가 입력되어야 합니다.");
+                    throw new IllegalArgumentException(ExceptionCode.NUMBER_PARSER_NEGATIVE_EXCEPTION);
                 }
                 numList.add(Double.parseDouble(operandArr[i]));
             }
             catch (NumberFormatException e){
-                throw new IllegalArgumentException(e.getCause());
+                throw new IllegalArgumentException(ExceptionCode.NUMBER_PARSER_FORMAT_EXCEPTION);
             }
         }
         return numList;
